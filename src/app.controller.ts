@@ -14,4 +14,9 @@ export class AppController {
   generateSuratKelengkapanBerkasALBTKursiRoda(): string {
     return this.appService.generateSuratKelengkapanBerkasALBTKursiRoda();
   }
+
+  @Get('surat-persetujuan-bantuan-ugd-igd')
+  generateSuratPersetujuanBantuanUGDIGD(): string {
+    return this.appService.generateSuratPersetujuanBantuanUGDIGD();
+  }
 }

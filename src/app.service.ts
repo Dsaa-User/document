@@ -79,7 +79,6 @@ export class AppService {
     });
     doc.render({
       id: 'YDDS/' + 'II/' + 'D/' + Math.floor(Math.random() * 1000),
-      //03/PPBNtlCJR/2023
       letterId: '03/' + 'PPBNI/' + 'CJR/' + '2023',
       created_at: date,
       latter_province: 'Jawa Timur',
@@ -98,6 +97,61 @@ export class AppService {
       .generate({ type: 'nodebuffer', compression: 'DEFLATE' });
     fs.writeFileSync(
       path.resolve(__dirname, '../src/document', 'new.docx'),
+      buf,
+    );
+
+    return 'ok';
+  }
+
+  generateSuratPersetujuanBantuanUGDIGD() {
+    const content = fs.readFileSync(
+      path.resolve(
+        __dirname,
+        '../src/document',
+        'surat-persetujuan-bantuan-ugd-igd.docx',
+      ),
+      'binary',
+    );
+    const PizZip = require('pizzip');
+    const Docxtemplater = require('docxtemplater');
+
+    const zip = new PizZip(content);
+    const doc = new Docxtemplater(zip, {
+      paragraphLoop: true,
+      linebreaks: true,
+    });
+
+    const date = new Date().toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+
+    doc.render({
+      id: 'YDDS/' + 'II/' + 'D/' + Math.floor(Math.random() * 1000),
+      createdAt: date,
+      letterProvince: 'Jawa Timur',
+      greeting: 'Kepada Yth.',
+      name: 'John Doe',
+      address: 'Sumampan, Kec. Sidoarjo, Kab. Sidoarjo',
+      province: 'Jawa Timur',
+      postalCode: '61257',
+      dateSubmission: date,
+      status: 'tidak',
+      hospitalName: 'RSUD Dr. Soetomo',
+      hospitalProvince: 'Jawa Timur',
+      requestedAmount: 'Rp. 3.986.000',
+      amountAfterFiftyPercent: 'Rp. 1.993.000',
+      paidAmount: 'Rp. 1.500.000',
+      accountNumber: '1234567890',
+      bankName: 'Bank BNI',
+    });
+
+    const buf = doc
+      .getZip()
+      .generate({ type: 'nodebuffer', compression: 'DEFLATE' });
+    fs.writeFileSync(
+      path.resolve(__dirname, '../src/generated', 'new.docx'),
       buf,
     );
 
