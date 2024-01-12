@@ -5,13 +5,13 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Get('generate-surat-kelengkapan-bantuan-ri')
+  generateSuratKelengkapanBantuanRI(): string {
+    return this.appService.generateSuratKelengkapanBantuanRI();
   }
 
-  @Get('generate')
-  generateDocx(): string {
-    return this.appService.generateDocx();
+  @Get('generate-surat-kelengkapan-berkas-albt-kursi-roda')
+  generateSuratKelengkapanBerkasALBTKursiRoda(): string {
+    return this.appService.generateSuratKelengkapanBerkasALBTKursiRoda();
   }
 }
