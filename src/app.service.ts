@@ -157,4 +157,94 @@ export class AppService {
 
     return 'ok';
   }
+
+  generateSuratPersetujuanKlaimHD() {
+    const content = fs.readFileSync(
+      path.resolve(
+        __dirname,
+        '../src/document',
+        'surat-persetujuan-klaim-hd.docx',
+      ),
+      'binary',
+    );
+    const PizZip = require('pizzip');
+    const Docxtemplater = require('docxtemplater');
+
+    const zip = new PizZip(content);
+    const doc = new Docxtemplater(zip, {
+      paragraphLoop: true,
+      linebreaks: true,
+    });
+
+    const date = new Date().toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+
+    doc.render({
+      id: 'YDDS/' + 'II/' + 'D/' + Math.floor(Math.random() * 1000),
+      createdAt: date,
+      letterProvince: 'Jawa Timur',
+      greeting: 'Kepada Yth.',
+      name: 'John Doe',
+      address: 'Sumampan, Kec. Sidoarjo, Kab. Sidoarjo',
+      province: 'Jawa Timur',
+      postalCode: '61257',
+      dateSubmission: date,
+      startTreatment: '01/01/2023',
+      endTreatment: '01/02/2023',
+      participant: [
+        {
+          date: '01/01/2023',
+          name: 'John Doe',
+          requestedAmount: 'Rp. 1.000.000',
+          rejectedAmount: '---',
+          coverageAmount: 'Rp. 1.000.000',
+        },
+        {
+          date: '08/01/2023',
+          name: 'John Doe',
+          requestedAmount: 'Rp. 1.000.000',
+          rejectedAmount: '---',
+          coverageAmount: 'Rp. 1.000.000',
+        },
+        {
+          date: '15/01/2023',
+          name: 'John Doe',
+          requestedAmount: 'Rp. 1.000.000',
+          rejectedAmount: '---',
+          coverageAmount: 'Rp. 1.000.000',
+        },
+        {
+          date: '22/01/2023',
+          name: 'John Doe',
+          requestedAmount: 'Rp. 1.000.000',
+          rejectedAmount: '---',
+          coverageAmount: 'Rp. 1.000.000',
+        },
+        {
+          date: '01/02/2023',
+          name: 'John Doe',
+          requestedAmount: 'Rp. 1.000.000',
+          rejectedAmount: '---',
+          coverageAmount: 'Rp. 1.000.000',
+        },
+      ],
+
+      totalRequestedAmount: 'Rp. 5.000.000',
+      totalCoverageAmount: 'Rp. 5.000.000',
+      bankName: 'Bank BNI',
+    });
+
+    const buf = doc
+      .getZip()
+      .generate({ type: 'nodebuffer', compression: 'DEFLATE' });
+    fs.writeFileSync(
+      path.resolve(__dirname, '../src/generated', 'new.docx'),
+      buf,
+    );
+
+    return 'ok';
+  }
 }

@@ -19,4 +19,9 @@ export class AppController {
   generateSuratPersetujuanBantuanUGDIGD(): string {
     return this.appService.generateSuratPersetujuanBantuanUGDIGD();
   }
+
+  @Get('surat-persetujuan-klaim-hd')
+  generateSuratPersetujuanKlaimHD(): string {
+    return this.appService.generateSuratPersetujuanKlaimHD();
+  }
 }
