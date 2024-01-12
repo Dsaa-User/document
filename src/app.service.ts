@@ -295,4 +295,56 @@ export class AppService {
 
     return 'ok';
   }
+
+  generateTransferDanaBNIDirect() {
+    const content = fs.readFileSync(
+      path.resolve(
+        __dirname,
+        '../src/document',
+        'transfer-dana-bni-direct.docx',
+      ),
+      'binary',
+    );
+    const PizZip = require('pizzip');
+    const Docxtemplater = require('docxtemplater');
+
+    const zip = new PizZip(content);
+    const doc = new Docxtemplater(zip, {
+      paragraphLoop: true,
+      linebreaks: true,
+    });
+
+    const date = new Date().toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+
+    doc.render({
+      id: 'YDDS/' + 'II/' + 'D/' + Math.floor(Math.random() * 1000),
+      createdAt: date,
+      name: 'Jane Doe',
+      dateSubmission: date,
+      accountNumberSender: '1234567890',
+      accountNumberReceiver: '1234567890',
+      amount: 'Rp. 1.000.000',
+      description: 'Transfer Dana BNI Direct',
+      makerName: 'Jane Doe',
+      makerPosition: 'Administrasi',
+      approverName: 'John Doe',
+      approverPosition: 'Kepala Cabang',
+      releaserName: 'John Doe',
+      releaserPosition: 'Sekretaris',
+    });
+
+    const buf = doc
+      .getZip()
+      .generate({ type: 'nodebuffer', compression: 'DEFLATE' });
+    fs.writeFileSync(
+      path.resolve(__dirname, '../src/generated', 'new.docx'),
+      buf,
+    );
+
+    return 'ok';
+  }
 }

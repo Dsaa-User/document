@@ -29,4 +29,9 @@ export class AppController {
   generateSuratPenolakanBantuanRI(): string {
     return this.appService.generateSuratPenolakanBantuanRI();
   }
+
+  @Get('transfer-dana-bni-direct')
+  generateTransferDanaBNIDirect(): string {
+    return this.appService.generateTransferDanaBNIDirect();
+  }
 }
