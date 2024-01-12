@@ -247,4 +247,52 @@ export class AppService {
 
     return 'ok';
   }
+
+  generateSuratPenolakanBantuanRI() {
+    const content = fs.readFileSync(
+      path.resolve(
+        __dirname,
+        '../src/document',
+        'surat-penolakan-bantuan-ri.docx',
+      ),
+      'binary',
+    );
+    const PizZip = require('pizzip');
+    const Docxtemplater = require('docxtemplater');
+
+    const zip = new PizZip(content);
+    const doc = new Docxtemplater(zip, {
+      paragraphLoop: true,
+      linebreaks: true,
+    });
+
+    const date = new Date().toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+
+    doc.render({
+      id: 'YDDS/' + 'II/' + 'D/' + Math.floor(Math.random() * 1000),
+      letterProvince: 'Jawa Timur',
+      createdAt: date,
+      greeting: 'Kepada Yth.',
+      name: 'John Doe',
+      address: 'Sumampan, Kec. Sidoarjo, Kab. Sidoarjo',
+      province: 'Jawa Timur',
+      postalCode: '61257',
+      dateSubmission: date,
+      reason: 'seluruh biaya ditanggung oleh Admedika - FWD',
+    });
+
+    const buf = doc
+      .getZip()
+      .generate({ type: 'nodebuffer', compression: 'DEFLATE' });
+    fs.writeFileSync(
+      path.resolve(__dirname, '../src/generated', 'new.docx'),
+      buf,
+    );
+
+    return 'ok';
+  }
 }

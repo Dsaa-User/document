@@ -24,4 +24,9 @@ export class AppController {
   generateSuratPersetujuanKlaimHD(): string {
     return this.appService.generateSuratPersetujuanKlaimHD();
   }
+
+  @Get('surat-penolakan-bantuan-ri')
+  generateSuratPenolakanBantuanRI(): string {
+    return this.appService.generateSuratPenolakanBantuanRI();
+  }
 }
