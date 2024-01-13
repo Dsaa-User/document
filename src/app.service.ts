@@ -347,4 +347,50 @@ export class AppService {
 
     return 'ok';
   }
+
+  generateVoucherPPPembukuan() {
+    const content = fs.readFileSync(
+      path.resolve(__dirname, '../src/document', 'voucher-pp-pembukuan.docx'),
+      'binary',
+    );
+    const PizZip = require('pizzip');
+    const Docxtemplater = require('docxtemplater');
+
+    const zip = new PizZip(content);
+    const doc = new Docxtemplater(zip, {
+      paragraphLoop: true,
+      linebreaks: true,
+    });
+
+    const date = new Date().toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+
+    doc.render({
+      id: 'YDDS/' + 'II/' + 'D/' + Math.floor(Math.random() * 1000),
+      province: 'Jawa Timur',
+      createdAt: date,
+      name: 'Jane Doe',
+      amount: 'Rp. 10.000.000',
+      amountTextFormat: 'Sepuluh Juta Rupiah',
+      accountNumber: '1234567890',
+      branchName: 'BNI Cabang Surabaya',
+      approverName: 'John Doe',
+      approverPosition: 'Kepala Cabang',
+      releaserName: 'John Doe',
+      releaserPosition: 'Sekretaris',
+    });
+
+    const buf = doc
+      .getZip()
+      .generate({ type: 'nodebuffer', compression: 'DEFLATE' });
+    fs.writeFileSync(
+      path.resolve(__dirname, '../src/generated', 'new.docx'),
+      buf,
+    );
+
+    return 'ok';
+  }
 }

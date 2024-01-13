@@ -34,4 +34,9 @@ export class AppController {
   generateTransferDanaBNIDirect(): string {
     return this.appService.generateTransferDanaBNIDirect();
   }
+
+  @Get('voucher-pp-pembukuan')
+  generateVoucherPPPembukuan(): string {
+    return this.appService.generateVoucherPPPembukuan();
+  }
 }
